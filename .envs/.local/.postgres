@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=splitsy
+POSTGRES_USER=KrnSaRWLFgLpzhIjXEUEUUmEPmhAPRut
+POSTGRES_PASSWORD=PNKEFEFzTzICYpkdGXzRFhneQ5vg9PUzH65PhNb7U4w4vitdzoFkJR6xgbDlMf3W
