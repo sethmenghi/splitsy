@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}Receipts{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Receipts</h2>
+
+  <div class="list-group">
+    {% for receipt in receipt_list %}
+        {% comment %}
+        Queryset should query all user's receipts, not use if
+        {% endcomment %}
+        {% if request.user.is_authenticated and request.user == receipt.uploaded_by %}
+            <a href="{% url 'receipts:detail' receipt.pk %}" class="list-group-item">
+                <h4 class="list-group-item-heading">{{ receipt.uuid }}</h4>
+            </a>
+        {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

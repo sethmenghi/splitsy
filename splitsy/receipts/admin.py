@@ -16,14 +16,19 @@ class ReceiptAdmin(admin.ModelAdmin):
         "text",
         "uploaded_by"
     ]
-    readonly_fields = ('show_url',)
+    readonly_fields = (
+        "text",
+        "preprocessed_image",
+        "uploaded_by",
+        # "show_url",
+    )
 
-    def show_url(self, instance):
-        url = reverse('receipts:detail', kwargs={'pk': instance.pk})
-        response = format_html("""<a href="{0}">{0}</a>""", url)
-        return response
+    # def show_url(self, instance):
+    #     url = reverse('receipts:detail', kwargs={'pk': instance.pk})
+    #     response = format_html("""<a href="{0}">{0}</a>""", url)
+    #     return response
 
-    show_url.short_description = 'Receipt URL'
-    # Displays HTML tags
-    # Never set allow_tags to True against user submitted data!!!
-    show_url.allow_tags = True
+    # show_url.short_description = 'Receipt URL'
+    # # Displays HTML tags
+    # # Never set allow_tags to True against user submitted data!!!
+    # show_url.allow_tags = True

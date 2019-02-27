@@ -1,22 +1,24 @@
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Receipt
 
 
-class ReceiptListView(ListView):
+class ReceiptCreateView(LoginRequiredMixin, CreateView):
+    model = Receipt
+    fields = ['image']
+
+
+class ReceiptListView(LoginRequiredMixin, ListView):
     model = Receipt
 
 
-class ReceiptDetailView(DetailView):
+class ReceiptDetailView(LoginRequiredMixin, DetailView):
     model = Receipt
 
 
-class ReceiptResultsView(ReceiptDetailView):
-    template_name = 'receipts/results.html'
-
-
-class ReceiptUpdateView(UpdateView):
+class ReceiptUpdateView(LoginRequiredMixin, UpdateView):
     model = Receipt
 
     def get_success_url(self):

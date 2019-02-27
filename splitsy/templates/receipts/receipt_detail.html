@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Receipt: {{ object.uuid }}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>{{ object.uuid }}</h2>
+      {% if object.name %}
+        <p>{{ object.name }}</p>
+      {% endif %}
+    </div>
+  </div>
+
+{% if object == request.receipt %}
+<!-- Action buttons -->
+<div class="row">
+
+  <div class="col-sm-12">
+    <a class="btn btn-primary" href="{% url 'receipts:update' %}" role="button">Update</a>
+    <a class="btn btn-danger" href="{% url 'receipts:delete' %}" role="button">Delete</a>
+    <!-- Your Stuff: Custom user template urls -->
+  </div>
+
+<div class="row">
+  <div class="col-sm-4">
+    <img src="{{ object.image.url }}">
+  </div>
+</div>
+<!-- End Action buttons -->
+{% endif %}
+
+
+</div>
+{% endblock content %}
+

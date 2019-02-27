@@ -1,8 +1,9 @@
 from django import forms
-from uploads.core.models import Document
+
+from .models import Receipt
 
 
-class DocumentForm(forms.ModelForm):
+class ReceiptCreation(forms.ModelForm):
     class Meta:
-        model = Document
-        fields = ('description', 'document', )
+        model = Receipt
+        fields = ('image',)
