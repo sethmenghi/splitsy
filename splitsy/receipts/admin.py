@@ -19,7 +19,6 @@ class ReceiptAdmin(admin.ModelAdmin):
     readonly_fields = (
         "text",
         "preprocessed_image",
-        "uploaded_by",
         # "show_url",
     )
 

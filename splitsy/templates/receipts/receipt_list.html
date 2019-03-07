@@ -1,22 +1,117 @@
 {% extends "base.html" %}
 {% load static i18n %}
-{% block title %}Receipts{% endblock %}
+{% block title %}splitsy - Receipts{% endblock %}
+
+{% block css %}
+  {{ block.super }}
+  <link  href="{% static 'css/cropper.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block javascript %}
+  {{ block.super }}
+  <script src="{% static 'js/cropper.min.js' %}"></script>
+  <script>
+    $(function () {
+
+      /* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
+      $("#id_image").change(function () {
+        if (this.files && this.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $("#image").attr("src", e.target.result);
+            $("#modalCrop").modal("show");
+          }
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+
+      /* SCRIPTS TO HANDLE THE CROPPER BOX */
+      var $image = $("#image");
+      var cropBoxData;
+      var canvasData;
+      $("#modalCrop").on("shown.bs.modal", function () {
+        $image.cropper({
+          viewMode: 1,
+          aspectRatio: NaN,
+          minCropBoxWidth: 200,
+          minCropBoxHeight: 200,
+          ready: function () {
+            $image.cropper("setCanvasData", canvasData);
+            $image.cropper("setCropBoxData", cropBoxData);
+          }
+        });
+      }).on("hidden.bs.modal", function () {
+        cropBoxData = $image.cropper("getCropBoxData");
+        canvasData = $image.cropper("getCanvasData");
+        $image.cropper("destroy");
+      });
+
+      $(".js-zoom-in").click(function () {
+        $image.cropper("zoom", 0.1);
+      });
+
+      $(".js-zoom-out").click(function () {
+        $image.cropper("zoom", -0.1);
+      });
+
+      /* SCRIPT TO COLLECT THE DATA AND POST TO THE SERVER */
+      $(".js-crop-and-upload").click(function () {
+        var cropData = $image.cropper("getData");
+        $("#id_x").val(cropData["x"]);
+        $("#id_y").val(cropData["y"]);
+        $("#id_height").val(cropData["height"]);
+        $("#id_width").val(cropData["width"]);
+        $("#formUpload").submit();
+      });
+
+    });
+  </script>
+{% endblock %}
 
 {% block content %}
-<div class="container">
-  <h2>Receipts</h2>
+<h1 class="page-header">Receipts</h1>
+ <!-- FORM TO UPLOAD THE IMAGES -->
+<form method="post" enctype="multipart/form-data" id="formUpload">
+  {% csrf_token %}
+  {{ form.as_p }}
+</form>
 
-  <div class="list-group">
-    {% for receipt in receipt_list %}
-        {% comment %}
-        Queryset should query all user's receipts, not use if
-        {% endcomment %}
-        {% if request.user.is_authenticated and request.user == receipt.uploaded_by %}
-            <a href="{% url 'receipts:detail' receipt.pk %}" class="list-group-item">
-                <h4 class="list-group-item-heading">{{ receipt.uuid }}</h4>
-            </a>
-        {% endif %}
-    {% endfor %}
+  <!-- MODAL TO CROP THE IMAGE -->
+  <div class="modal fade" id="modalCrop">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">Crop the receipt</h4>
+        </div>
+        <div class="modal-body">
+          <img src="" id="image" style="max-width: 100%;">
+        </div>
+        <div class="modal-footer">
+          <div class="btn-group pull-left" role="group">
+            <button type="button" class="btn btn-default js-zoom-in">
+              <span class="glyphicon glyphicon-zoom-in"></span>
+            </button>
+            <button type="button" class="btn btn-default js-zoom-out">
+              <span class="glyphicon glyphicon-zoom-out"></span>
+            </button>
+          </div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Nevermind</button>
+          <button type="button" class="btn btn-primary js-crop-and-upload">Crop and upload</button>
+        </div>
+      </div>
+    </div>
   </div>
+
+<!-- CONTAINER TO DISPLAY THE CROPPED IMAGES -->
+<div class="row" style="margin-top: 20px">
+  {% for receipt in receipts %}
+    <div class="col-sm-4 col-md-3">
+      {{ receipt.image_tag }}
+    </div>
+  {% endfor %}
 </div>
 {% endblock content %}
+

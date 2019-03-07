@@ -15,23 +15,21 @@
     </div>
   </div>
 
-{% if object == request.receipt %}
 <!-- Action buttons -->
 <div class="row">
 
   <div class="col-sm-12">
-    <a class="btn btn-primary" href="{% url 'receipts:update' %}" role="button">Update</a>
-    <a class="btn btn-danger" href="{% url 'receipts:delete' %}" role="button">Delete</a>
+    <a class="btn btn-primary" href="{% url 'receipts:update' object.pk %}" role="button">Update</a>
+    <a class="btn btn-danger" href="{% url 'receipts:delete' object.pk %}" role="button">Delete</a>
     <!-- Your Stuff: Custom user template urls -->
   </div>
 
 <div class="row">
   <div class="col-sm-4">
-    <img src="{{ object.image.url }}">
+    {{ object.image_tag }}
   </div>
 </div>
 <!-- End Action buttons -->
-{% endif %}
 
 
 </div>
