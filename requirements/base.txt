@@ -7,6 +7,7 @@ redis>=2.10.6, < 3  # pyup: < 3 # https://github.com/antirez/redis
 # OCR / OpenCV
 imutils
 scikit-image
+opencv-python
 pytesseract
 
 # AWS

@@ -27,10 +27,6 @@ class ReceiptCreateView(LoginRequiredMixin, CreateView):
     fields = ['image']
 
 
-# class ReceiptListView(LoginRequiredMixin, ListView):
-#     model = Receipt
-
-
 class ReceiptDetailView(LoginRequiredMixin, DetailView):
     model = Receipt
 

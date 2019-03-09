@@ -14,7 +14,8 @@ RUN apt-get update \
     musl-dev \
     libpq-dev \
   # Pillow dependencies && opencv
-  && apt-get install -y python-opencv \
+  && apt-get install -y build-essential \
+    python-opencv \
     libjpeg-dev \
     libopencv-dev \
     libpng-dev \

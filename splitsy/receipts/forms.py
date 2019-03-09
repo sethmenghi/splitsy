@@ -7,6 +7,7 @@ from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from .models import Receipt
+from .utils import unskew_text_in_img
 
 
 class ReceiptCreation(forms.ModelForm):
@@ -42,7 +43,7 @@ class ReceiptCreation(forms.ModelForm):
             resized_image.size,
             receipt.image.file.charset
         ), save=False)
-
+        unskew_text_in_img(receipt.preprocessed_image.path, receipt.preprocessed_image.path)
         if commit:
             receipt.save()
         return receipt
