@@ -18,7 +18,7 @@ def receipt_list(request):
             return redirect('receipts:list')
     else:
         form = ReceiptCreation()
-    receipts = Receipt.objects.filter(uploaded_by=user)
+    receipts = Receipt.objects.filter(uploaded_by=user).order_by('-modified')
     return render(request, 'receipts/receipt_list.html', {'form': form, 'receipts': receipts})
 
 
@@ -33,6 +33,9 @@ class ReceiptCreateView(LoginRequiredMixin, CreateView):
 
 class ReceiptDetailView(LoginRequiredMixin, DetailView):
     model = Receipt
+
+    def get_success_url(self):
+        return reverse('receipts:list')
 
 
 class ReceiptUpdateView(LoginRequiredMixin, UpdateView):

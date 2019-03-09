@@ -33,8 +33,8 @@
         $image.cropper({
           viewMode: 1,
           aspectRatio: NaN,
-          minCropBoxWidth: 200,
-          minCropBoxHeight: 200,
+          minCropBoxWidth: 50,
+          minCropBoxHeight: 50,
           ready: function () {
             $image.cropper("setCanvasData", canvasData);
             $image.cropper("setCropBoxData", cropBoxData);
@@ -71,10 +71,12 @@
 {% block content %}
 <h1 class="page-header">Receipts</h1>
  <!-- FORM TO UPLOAD THE IMAGES -->
+ {% if request.user.is_verified %}
 <form method="post" enctype="multipart/form-data" id="formUpload">
   {% csrf_token %}
   {{ form.as_p }}
 </form>
+{% endif %}
 
   <!-- MODAL TO CROP THE IMAGE -->
   <div class="modal fade" id="modalCrop">
@@ -108,8 +110,33 @@
 <!-- CONTAINER TO DISPLAY THE CROPPED IMAGES -->
 <div class="row" style="margin-top: 20px">
   {% for receipt in receipts %}
-    <div class="col-sm-4 col-md-3">
-      {{ receipt.image_tag }}
+    <div class="card mb-3" style="max-width: 540px;">
+      <div class="row no-gutters">
+        <div class="col-md-5">
+          <a href="{% url 'receipts:detail' pk=receipt.pk %}">
+            {% if receipt.preprocessed_image %}
+              <img src="{{ receipt.preprocessed_image.url }}" class="card-img" alt="Receipt Image">
+            {% else %}
+              <img src="{{ receipt.image.url }}" class="card-img" alt="Receipt Image">
+            {% endif %}
+          </a>
+        </div>
+        <div class="col-md-7">
+          <div class="card-body">
+            <h5 class="card-title">{{ receipt.pk }}</h5>
+            <p class="card-text">
+              {% if receipt.text %}
+                {{ receipt.text }}
+              {% else %}
+                No text processed from image.
+              {% endif %}
+            </p>
+            <p class="card-text"><small class="text-muted">Uploaded on {{ receipt.created }}</small></p>
+              <a class="btn btn-primary" href="{% url 'receipts:update' receipt.pk %}" role="button">Update</a>
+              <a class="btn btn-danger confirm-delete" href="{% url 'receipts:delete' receipt.pk %}">Delete</a>
+          </div>
+        </div>
+      </div>
     </div>
   {% endfor %}
 </div>

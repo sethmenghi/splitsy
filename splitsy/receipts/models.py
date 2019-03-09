@@ -34,6 +34,9 @@ class Receipt(TimeStampedModel):
     def image_tag(self):
         return mark_safe('<img src="%s" class="img-thumbnail">' % (self.image.url))
 
+    def preprocessed_image_tag(self):
+        return mark_safe('<img src="%s" class="img-thumbnail">' % (self.preprocessed_image.url))
+
     image_tag.short_description = 'Image'
 
     def get_absolute_url(self):

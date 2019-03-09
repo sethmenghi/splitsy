@@ -19,11 +19,8 @@ urlpatterns = [
         regex=r'^(?P<pk>\d+)/update/$',
         view=views.ReceiptUpdateView.as_view(),
         name='update'
-    ), url(
-        regex=r'^create/$',
-        view=views.ReceiptCreateView.as_view(),
-        name='create'
-    ), url(
+    ),
+    url(
         regex=r'^(?P<pk>\d+)/delete/$',
         view=views.ReceiptDeleteView.as_view(),
         name='delete'
