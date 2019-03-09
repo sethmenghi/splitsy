@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Receipt: {{ object.uuid }}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>{{ object.uuid }}</h2>
+      {% if object.name %}
+        <p>{{ object.name }}</p>
+      {% endif %}
+    </div>
+  </div>
+
+<!-- Action buttons -->
+<div class="row">
+
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row no-gutters">
+    <div class="col-md-5">
+      {% if receipt.preprocessed_image %}
+      <img src="{{ receipt.preprocessed_image.url }}" class="card-img" alt="Receipt Image">
+      {% else %}
+      <img src="{{ receipt.image.url }}" class="card-img" alt="Receipt Image">
+      {% endif %}
+    </div>
+    <div class="col-md-7">
+      <div class="card-body">
+        <!-- <h5 class="card-title">{{ receipt.uuid }}</h5> -->
+        <p class="card-text">
+          {% if receipt.text %}
+            {{ receipt.text }}
+          {% else %}
+            No text processed from image.
+          {% endif %}
+        </p>
+        <p class="card-text"><small class="text-muted">Uploaded on {{ receipt.created }}</small></p>
+          <a class="btn btn-primary" href="{% url 'receipts:update' object.pk %}" role="button">Update</a>
+          <a class="btn btn-danger confirm-delete" href="{% url 'receipts:delete' object.pk %}">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Action buttons -->
+
+
+</div>
+{% endblock content %}
+{% block javascript %}
+{{ block.super }}
+  <script>
+  $(document).on('click', '.confirm-delete', function(){
+    return confirm('Are you sure you want to delete this?');
+  })</script>
+{% endblock %}

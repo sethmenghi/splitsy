@@ -7,6 +7,7 @@ redis>=2.10.6, < 3  # pyup: < 3 # https://github.com/antirez/redis
 # OCR / OpenCV
 imutils
 scikit-image
+opencv-python
 pytesseract
 
 # AWS
@@ -25,3 +26,4 @@ django-redis==4.10.0  # https://github.com/niwinz/django-redis
 # Django REST Framework
 djangorestframework==3.9.1  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
+django-cors-headers==2.4.0
